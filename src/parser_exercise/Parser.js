@@ -5,6 +5,7 @@ import './parser.css';
 const Parser = () => {
   const [matchOutput, setMatchOutput] = useState({});
   const [inputText, setInputText] = useState('');
+  const [selectedLetter, setSelectedLetter] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,6 +39,20 @@ const Parser = () => {
           <label htmlFor="phrase">Phrase</label>
         </div>
         <textarea name="phrase" id="phrase" cols="30" rows="10" onChange={(e) => setInputText(e.target.value)} value={inputText}></textarea>
+        {selectedLetter && (
+          <p data-testid="highlighted-text">
+            {inputText.split(' ').map((word, i) => {
+              if (word.includes(selectedLetter)) {
+                return (
+                  <span key={i}>
+                    <mark>{word}</mark>{' '}
+                  </span>
+                );
+              }
+              return `${word} `;
+            })}
+          </p>
+        )}
         <button className="button parse" type="submit">
           Parse
         </button>
@@ -47,7 +62,7 @@ const Parser = () => {
       </form>
       <pre>
         {Object.keys(matchOutput).map((letter) => (
-          <p key={letter}>{`${letter}: ${matchOutput[letter]}`}</p>
+          <p key={letter} onClick={() => setSelectedLetter(letter)}>{`${letter}: ${matchOutput[letter]}`}</p>
         ))}
       </pre>
     </>
