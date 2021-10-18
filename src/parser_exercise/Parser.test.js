@@ -42,4 +42,16 @@ describe('Parser component', () => {
     expect(input.value).toBe('');
     expect(screen.queryByText('a: 0')).toBe(null);
   });
+
+  test('it should display highlighted selected letters', () => {
+    const input = screen.getByLabelText('Phrase');
+    fireEvent.change(input, { target: { value: 'this is a test' } });
+    expect(input.value).toBe('this is a test');
+
+    fireEvent.click(screen.getByText('Parse'));
+    expect(screen.getByText('a: 1'));
+
+    fireEvent.click(screen.getByText('a: 1'));
+    expect(screen.getByTestId('highlighted-text').innerHTML).toContain('<mark>a</mark>');
+  });
 });
